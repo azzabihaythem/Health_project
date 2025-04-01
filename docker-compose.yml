@@ -1,0 +1,34 @@
+services:
+  # Service MongoDB
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin  # Define the root username
+      - MONGO_INITDB_ROOT_PASSWORD=admin#75*Db  # Define the root passwor
+    volumes:
+      - mongo_data:/data/db  # Volume pour la base de données MongoDB
+    ports:
+      - "27017:27017"        # Exposer le port MongoDB
+
+  # Service Python pour exécuter le script de migration
+  python-app:
+    build: .
+    container_name: python-app
+    volumes:
+      - csv_data:/data/csv  # Volume pour le fichier CSV dans le conteneur
+      - ./csv:/data/csv  # Monte le dossier local dans /data/csv
+    depends_on:
+      - mongo
+   # environment:
+      #- MONGO_URI=mongodb://mongo:27017/
+     # sh -c: The sh -c part tells the container to use the shell (sh)
+     # to interpret the command string that follows. This allows you to 
+     #execute multiple commands in a single line, separated by &&.
+    command: sh -c "python healthVisual.py &&  python testVisual.py"
+volumes:
+  mongo_data:  # Volume pour MongoDB
+    driver: local
+  csv_data:    # Volume pour le fichier CSV
+    driver: local
