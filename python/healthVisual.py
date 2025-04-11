@@ -1,11 +1,32 @@
 import pandas as pd
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
+load_dotenv()
+# Récupérer les variables d'environnement
+admin_username = os.getenv("MONGO_ADMIN_USERNAME")
+admin_password = os.getenv("MONGO_ADMIN_PASSWORD")
+readonly_username = os.getenv("MONGO_READ_ONLY_USERNAME")
+readonly_password = os.getenv("MONGO_READ_ONLY_USERNAME_PASSWORD")
+mongo_host = os.getenv("MONGO_HOST")
+mongo_port = os.getenv("MONGO_PORT")
+print(f"***************admin_username.{admin_username}")
 # Connexion à MongoDB
-#client = MongoClient('mongodb://localhost:27017/')
-client =  MongoClient("mongodb://admin:admin#75*Db@mongo:27017/")
+#client = MongoClient("mongodb://admin:*****@mongo:27017/")
+client =  MongoClient(f"mongodb://{admin_username}:{admin_password}@{mongo_host}:{mongo_port}/")
 db = client['medical_db']  # Nom de la base
 collection = db['patients']  # Nom de la collection
+
+
+# Créer un utilisateur en lecture seule
+db.command("createUser", readonly_username, pwd=readonly_password, roles=[{"role": "read", "db": "medical_db"}])
+
+
+#print("Utilisateur Soumaia (lecture seule) créé avec succès.")
+
+
+
 
 # Charger le fichier CSV
 csv_file_path = "/data/csv/healthcare_dataset_nettoye.csv"
@@ -49,12 +70,6 @@ else:
 
 
 
-
-
-
-
-
-
 # CREATE - Insérer un document
 user1 = {"name": "Alice", "age": 30, "Gender": "Male"}
 collection.insert_one(user1)  
@@ -83,7 +98,7 @@ collection.delete_one({"name": "Alice"})
 print("\ Alice a été supprimé")
 
 # Vérifier la suppression
-print("\n📌 Liste des utilisateurs après suppression :")
+print("\n Liste des utilisateurs après suppression :")
 for user in collection.find():
     print(user)
 

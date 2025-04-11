@@ -5,12 +5,12 @@ services:
     container_name: mongo
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin  # Define the root username
-      - MONGO_INITDB_ROOT_PASSWORD=admin#75*Db  # Define the root passwor
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_ADMIN_USERNAME  # Define the root username
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_ADMIN_PASSWORD  # Define the root passwor
     volumes:
       - mongo_data:/data/db  # Volume pour la base de données MongoDB
     ports:
-      - "27017:27017"        # Exposer le port MongoDB
+      - "27018:27017"        # Exposer le port MongoDB
 
   # Service Python pour exécuter le script de migration
   python-app:

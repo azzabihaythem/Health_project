@@ -13,7 +13,7 @@ COPY requirements.txt .
 
 # Installer les dépendances nécessaires
 RUN pip install --no-cache-dir -r requirements.txt
-
+#RUN python -m pip install python-dotenv
 # Copier le reste des fichiers dans le conteneur
 COPY /python/testVisual.py .
 
@@ -22,6 +22,8 @@ COPY /python/testVisual.py .
 COPY /python/healthVisual.py .
 
 
+# Copier env dans le conteneur
+COPY .env .
 
 # Commande par défaut pour exécuter le script Python
 #Couldn't be executed beause the volume (/data/csv)is not reachable yet
