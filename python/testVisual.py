@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from pymongo import MongoClient
 from dotenv import load_dotenv
-
+from cryptography.fernet import Fernet
 
 class TestMongoDB(unittest.TestCase):
 
@@ -21,6 +21,16 @@ class TestMongoDB(unittest.TestCase):
         admin_password = os.getenv("MONGO_ADMIN_PASSWORD")
         mongo_host = os.getenv("MONGO_HOST")
         mongo_port = os.getenv("MONGO_PORT")
+
+
+        # Charger la clé de chiffrement
+        with open("encryption_key.key", "rb") as key_file:
+            key = key_file.read()
+
+        cipher_suite = Fernet(key)
+        admin_password = cipher_suite.decrypt(admin_password.encode()).decode()
+        readonly_password = cipher_suite.decrypt(admin_password.encode()).decode()
+
         client =  MongoClient(f"mongodb://{admin_username}:{admin_password}@{mongo_host}:{mongo_port}/")
 
 

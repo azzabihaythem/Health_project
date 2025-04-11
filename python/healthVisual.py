@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from cryptography.fernet import Fernet
 
 load_dotenv()
 # Récupérer les variables d'environnement
@@ -11,6 +12,21 @@ readonly_username = os.getenv("MONGO_READ_ONLY_USERNAME")
 readonly_password = os.getenv("MONGO_READ_ONLY_USERNAME_PASSWORD")
 mongo_host = os.getenv("MONGO_HOST")
 mongo_port = os.getenv("MONGO_PORT")
+
+
+
+
+
+# Charger la clé de chiffrement
+with open("encryption_key.key", "rb") as key_file:
+    key = key_file.read()
+
+cipher_suite = Fernet(key)
+admin_password = cipher_suite.decrypt(admin_password.encode()).decode()
+readonly_password = cipher_suite.decrypt(admin_password.encode()).decode()
+
+
+
 print(f"***************admin_username.{admin_username}")
 # Connexion à MongoDB
 #client = MongoClient("mongodb://admin:*****@mongo:27017/")

@@ -3,7 +3,7 @@ pymongo==4.11.3  # Pour connecter et interagir avec MongoDB
 unittest2==1.1.0  # Pour les tests unitaires afin de valider les fonctionnalités du script
 numpy==2.2.4       #Python
 python-dotenv== 0.21.0 # Pour gérer les variables d'environnement
-
+cryptography== 43.0.0 # Pour le chiffrement et le déchiffrement des données
 
 
 
