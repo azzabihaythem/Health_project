@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 
 load_dotenv()
-# Récupérer les variables d'environnement
+# Récupérer les variables d'environnement.
 admin_username = os.getenv("MONGO_ADMIN_USERNAME")
 admin_password = os.getenv("MONGO_ADMIN_PASSWORD")
 readonly_username = os.getenv("MONGO_READ_ONLY_USERNAME")
